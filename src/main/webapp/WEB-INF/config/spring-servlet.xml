@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+
+    <mvc:annotation-driven />
+    <context:component-scan base-package="test.spring.controller"/>
+
+    <!--jsp view-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/view/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <!--配置多个拦截器将顺序执行-->
+        <mvc:interceptor>
+            <!-- 匹配的是url路径，如果不配置或者/**,将拦截所有的Controller -->
+            <mvc:mapping path="/test/**" />
+            <bean class="test.spring.Interceptor.SpringInterceptor">
+                <property name="excludedUrls">
+                    <list>
+                        <value>/test/admin/all</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>
